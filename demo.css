@@ -1,0 +1,69 @@
+/* 
+    Document   : demo
+    Created on : May 10, 2010, 6:30:13 AM
+    Author     : mikaelbrevik
+    Description:
+        Just to save some space in the demofiles.
+*/
+* { margin: 0px; padding: 0px; }
+body {
+    font: 75%/125% Helvetica, Verdana, Arial, sans-serif;
+    background: #c1c1c1;
+    padding: 20px;
+}
+label {
+    display: block;
+    float: left;
+    width: 30%;
+    padding: 5px;
+}
+label input {
+    display: block;
+    width: 100%;
+}
+hr {
+    border: none;
+    background: none;
+    clear: both;
+}
+fieldset {
+    width: 542px;
+    border: 0px;
+    background: #f1f1f1;
+    padding: 5px;
+}
+legend {
+    background: #f9f9f9;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 5px;
+}
+.masterResult {
+    width: 580px;
+    margin-top: 20px;
+}
+ul, ol {
+    list-style-position: inside;
+}
+.resultBox {
+    width: 45%;
+    padding: 5px;
+    float: left;
+    margin-right: 10px;
+    background: #f1f1f1;
+    margin-bottom: 10px;
+}
+.last {
+    padding: 5px;
+    clear: both;
+    width: 542px;
+    background: #f1f1f1;
+}
+a:link, a:visited {
+    text-decoration: none;
+    color: #478EE5;
+}
+a:hover, a:active {
+    text-decoration: underline;
+    color: #155099;
+}
