@@ -8,7 +8,7 @@
 == How to install ==
 
  * Download latest version of MetaTune
- * Upload `/lib` and all it's contents to your web server using PHP5. 
+ * Upload `/lib` and all it's contents to your web server. 
  * Edit `/lib/config.php` to fit yout need. 
  * Look at some of the examples or read the FeatureList for help using MetaTune. 
 
