@@ -1,0 +1,23 @@
+= Installation and Requirements =
+== Requirements ==
+
+ * PHP 5
+ * Enabled fopen wrappers.
+ * Read/Write access to server (For caching)
+
+== How to install ==
+
+ * Download latest version of MetaTune
+ * Upload `/lib` and all it's contents to your web server using PHP5. 
+ * Edit `/lib/config.php` to fit yout need. 
+ * Look at some of the examples or read the FeatureList for help using MetaTune. 
+
+
+== Features ==
+
+Some features includes:
+ * Search for Track/Artist/Album
+ * Lookup detailed/basic info about Track/Artist/Album
+ * Exceptions for error handling. 
+ * Caching metadata.
+ * XML Import/Export for quick save/load.
