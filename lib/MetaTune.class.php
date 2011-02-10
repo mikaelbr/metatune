@@ -288,9 +288,10 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $spotifyURI
+	 * @param boolean $details
      * @return mixed
      */
-    public function lookup($spotifyURI) {
+    public function lookup($spotifyURI, $details = true) {
         $uriExtract = explode(":", $spotifyURI);
         if (count($uriExtract) < 2) {
             throw new MetaTuneException("404 Not Found");
@@ -298,11 +299,9 @@ class MetaTune {
 
         switch ($uriExtract[1]) {
             case "artist":
-                return $this->lookupArtistDetailed($spotifyURI);
-                break;
+                return $this->lookupArtist($spotifyURI, $details);
             case "album":
-                return $this->lookupAlbumDetailed($spotifyURI);
-                break;
+                return $this->lookupAlbum($spotifyURI, $details);
             default:
                 return $this->lookupTrack($spotifyURI);
         }
@@ -342,8 +341,12 @@ class MetaTune {
      * Get basic info about one artist. Argument takes a spotify URI or just the
      * id it self.
      *
+	 * If param $details is false:
      * This method will only get the basic information about an artist.
      * Will not get all artist's albums.
+	 *
+	 * If param $details is true:
+	 * This method will return an artist with all it's albums.
      *
      * Example of $id:
      * <ul>
@@ -353,15 +356,21 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $id
+	 * @param boolean $details
      * @return Artist
      */
-    public function lookupArtist($id) {
+    public function lookupArtist($id, $details = false) {
 
         if (substr($id, 0, 15) != "spotify:artist:") {
             $id = "spotify:artist:" . $id;
         }
 
         $url = self::SERVICE_BASE_URL_LOOKUP . "?uri=" . ($id);
+		
+		if($details) {
+			$url .= "&extras=albumdetail";
+		}
+
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
 
@@ -383,31 +392,21 @@ class MetaTune {
      * <li>5ObUhLdIEbhEqVCYxzVQ9l</li>
      * </ul>
      *
+	 * @deprecated
      * @throws MetaTuneException
      * @param string $id
      * @return Artist
      */
     public function lookupArtistDetailed($id) {
-        if (substr($id, 0, 15) != "spotify:artist:") {
-            $id = "spotify:artist:" . $id;
-        }
-
-        $url = self::SERVICE_BASE_URL_LOOKUP . "?uri=" . ($id) . "&extras=albumdetail";
-        $contents = $this->requestContent($url);
-        $xml = new SimpleXMLElement($contents);
-
-        $artist = $this->extractArtistInfo($xml);
-        $artist->setURI($id);
-
-        return $artist;
+        return $this->lookupArtist($id, true);
     }
 
     /**
      * Get basic info about one album. Argument takes a spotify URI
      * or just the id it self.
      *
-     * This method only gets basic album information. Will not contain the
-     * detailed information like tracks in album.
+	 * If $details is false only basic album information will be fetched. 
+	 * Otherwise all details will be shown. (Tracks)
      *
      * Example of $id:
      * <ul>
@@ -417,18 +416,24 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $id
+	 * @param boolean $details
      * @return Album
      */
-    public function lookupAlbum($id) {
+    public function lookupAlbum($id, $details = false) {
         if (substr($id, 0, 14) != "spotify:album:") {
             $id = "spotify:album:" . $id;
         }
 
         $url = self::SERVICE_BASE_URL_LOOKUP . "?uri=" . ($id);
+
+		if($details) {
+			$url .= "&extras=trackdetail";
+		}
+
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
 
-        $album = $this->extractAlbumInfo($xml);
+        $album = $this->extractAlbumInfo($xml, $id);
         $album->setURI($id);
         return $album;
     }
@@ -446,22 +451,13 @@ class MetaTune {
      * <li>1kjefoUShy8bZcwBEHtMWp</li>
      * </ul>
      *
+	 * @deprecated
      * @throws MetaTuneException
      * @param string $id
      * @return Album
      */
     public function lookupAlbumDetailed($id) {
-        if (substr($id, 0, 14) != "spotify:album:") {
-            $id = "spotify:album:" . $id;
-        }
-
-        $url = self::SERVICE_BASE_URL_LOOKUP . "?uri=" . ($id) . "&extras=trackdetail";
-        $contents = $this->requestContent($url);
-        $xml = new SimpleXMLElement($contents);
-
-        $album = $this->extractAlbumInfo($xml, $id);
-        $album->setURI($id);
-        return $album;
+        return $this->lookupAlbum($id, true);
     }
 
     /**
