@@ -45,9 +45,8 @@
  * approved in any way by Spotify. Spotify is the registered trade mark of the
  * Spotify Group.</i>
  *
- * @todo remove redundant information (recursive artist/track/album)?
  * @todo caching added - Alot of data cached? Flush capabillities?
- * @copyright Mikael Brevik 2010
+ * @copyright Mikael Brevik 2011
  * @author Mikael Brevik <mikaelbre@gmail.com>
  * @version 1.0
  * @package MetaTune
@@ -65,15 +64,18 @@ class MetaTune {
 
     // Singelton-patterned class. No need to make an instance of this object 
     // outside it self. 
-    private function __construct() {
+    private function __construct()
+    {
         
     }
 
     /**
      * Get new instance of this object.
      */
-    public static function getInstance() {
-        if (!isset(self::$instance)) {
+    public static function getInstance()
+    {
+        if (!isset(self::$instance))
+        {
             $class = __CLASS__;
             self::$instance = new $class;
         }
@@ -85,7 +87,8 @@ class MetaTune {
      * Prevents cloning
      * Cloning not allowed in a singelton patterned class
      */
-    public function __clone() {
+    public function __clone()
+    {
         trigger_error('Clone is not allowed.', E_USER_ERROR);
     }
 
@@ -97,27 +100,38 @@ class MetaTune {
      * @param mixed $input
      * @return string
      */
-    public function generateXML($input) {
-        if (!is_array($input) && $input instanceof SpotifyItem) {
+    public function generateXML($input)
+    {
+        if (!is_array($input) && $input instanceof SpotifyItem)
+        {
             return $input->asXML();
         }
 
         // Empty array. No need for that. 
-        if (count($input) < 1) {
+        if (count($input) < 1)
+        {
             throw new MetaTuneException(1003);
         }
 
-        if ($input[0] instanceof Artist) {
+        if ($input[0] instanceof Artist)
+        {
             $xml = new MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><artists></artists>');
-        } else if ($input[0] instanceof Track) {
+        }
+        else if ($input[0] instanceof Track)
+        {
             $xml = new MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><tracks></tracks>');
-        } else if ($input[0] instanceof Album) {
+        }
+        else if ($input[0] instanceof Album)
+        {
             $xml = new MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><albums></albums>');
-        } else {
+        }
+        else
+        {
             throw new MetaTuneException(1004);
         }
 
-        foreach ($input as $item) {
+        foreach ($input as $item)
+        {
             $xml->addXMLElement(new MBSimpleXMLElement($item->asXML()));
         }
 
@@ -131,18 +145,22 @@ class MetaTune {
      * @param string $contents
      * @return mixed
      */
-    public function parseXMLTracks($contents) {
+    public function parseXMLTracks($contents)
+    {
         $xml = new SimpleXMLElement($contents);
-        if (isset($xml->track)) {
+        if (isset($xml->track))
+        {
             $tracks = array();
-            foreach ($xml->track as $track) {
+            foreach ($xml->track as $track)
+            {
                 $tracks[] = $this->extractTrackInfo($track);
             }
 
             return $tracks;
         }
 
-        if (isset($xml->name)) {
+        if (isset($xml->name))
+        {
             return $this->extractTrackInfo($xml);
         }
 
@@ -156,18 +174,22 @@ class MetaTune {
      * @param string $contents
      * @return mixed
      */
-    public function parseXMLArtist($contents) {
+    public function parseXMLArtist($contents)
+    {
         $xml = new SimpleXMLElement($contents);
-        if (isset($xml->artist)) {
+        if (isset($xml->artist))
+        {
             $artists = array();
-            foreach ($xml->artist as $artist) {
+            foreach ($xml->artist as $artist)
+            {
                 $artists[] = $this->extractArtistInfo($artist);
             }
 
             return $artists;
         }
 
-        if (isset($xml->name)) {
+        if (isset($xml->name))
+        {
             return $this->extractArtistInfo($xml);
         }
 
@@ -186,19 +208,23 @@ class MetaTune {
      * @param string $contents
      * @return mixed
      */
-    public function parseXMLAlbum($contents) {
+    public function parseXMLAlbum($contents)
+    {
         $xml = new SimpleXMLElement($contents);
-        if (isset($xml->album)) {
+        if (isset($xml->album))
+        {
             $albums = array();
 
-            foreach ($xml->album as $album) {
+            foreach ($xml->album as $album)
+            {
                 $albums[] = $this->extractAlbumInfo($album);
             }
 
             return $albums;
         }
 
-        if (isset($xml->name)) {
+        if (isset($xml->name))
+        {
             return $this->extractAlbumInfo($xml);
         }
 
@@ -219,13 +245,15 @@ class MetaTune {
      * @param string $name
      * @return array
      */
-    public function searchTrack($name) {
+    public function searchTrack($name)
+    {
         $url = self::SERVICE_BASE_URL_SEARCH . "track?q=" . $this->translateString($name);
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
 
         $tracks = array();
-        foreach ($xml->track as $track) {
+        foreach ($xml->track as $track)
+        {
             $tracks[] = $this->extractTrackInfo($track);
         }
 
@@ -243,13 +271,15 @@ class MetaTune {
      * @param string $name
      * @return array
      */
-    public function searchArtist($name) {
+    public function searchArtist($name)
+    {
         $url = self::SERVICE_BASE_URL_SEARCH . "artist?q=" . $this->translateString($name);
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
 
         $artists = array();
-        foreach ($xml->artist as $artist) {
+        foreach ($xml->artist as $artist)
+        {
             $artists[] = $this->extractArtistInfo($artist);
         }
 
@@ -263,13 +293,15 @@ class MetaTune {
      * @param string $name
      * @return array
      */
-    public function searchAlbum($name) {
+    public function searchAlbum($name)
+    {
         $url = self::SERVICE_BASE_URL_SEARCH . "album?q=" . $this->translateString($name);
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
 
         $albums = array();
-        foreach ($xml->album as $album) {
+        foreach ($xml->album as $album)
+        {
             $albums[] = $this->extractAlbumInfo($album);
         }
 
@@ -288,16 +320,19 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $spotifyURI
-	 * @param boolean $details
+     * @param boolean $details
      * @return mixed
      */
-    public function lookup($spotifyURI, $details = true) {
+    public function lookup($spotifyURI, $details = true)
+    {
         $uriExtract = explode(":", $spotifyURI);
-        if (count($uriExtract) < 2) {
+        if (count($uriExtract) < 2)
+        {
             throw new MetaTuneException("404 Not Found");
         }
 
-        switch ($uriExtract[1]) {
+        switch ($uriExtract[1])
+        {
             case "artist":
                 return $this->lookupArtist($spotifyURI, $details);
             case "album":
@@ -321,9 +356,11 @@ class MetaTune {
      * @param string $id
      * @return Track
      */
-    public function lookupTrack($id) {
+    public function lookupTrack($id)
+    {
 
-        if (substr($id, 0, 14) != "spotify:track:") {
+        if (substr($id, 0, 14) != "spotify:track:")
+        {
             $id = "spotify:track:" . $id;
         }
 
@@ -341,12 +378,12 @@ class MetaTune {
      * Get basic info about one artist. Argument takes a spotify URI or just the
      * id it self.
      *
-	 * If param $details is false:
+     * If param $details is false:
      * This method will only get the basic information about an artist.
      * Will not get all artist's albums.
-	 *
-	 * If param $details is true:
-	 * This method will return an artist with all it's albums.
+     *
+     * If param $details is true:
+     * This method will return an artist with all it's albums.
      *
      * Example of $id:
      * <ul>
@@ -356,20 +393,23 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $id
-	 * @param boolean $details
+     * @param boolean $details
      * @return Artist
      */
-    public function lookupArtist($id, $details = false) {
+    public function lookupArtist($id, $details = false)
+    {
 
-        if (substr($id, 0, 15) != "spotify:artist:") {
+        if (substr($id, 0, 15) != "spotify:artist:")
+        {
             $id = "spotify:artist:" . $id;
         }
 
         $url = self::SERVICE_BASE_URL_LOOKUP . "?uri=" . ($id);
-		
-		if($details) {
-			$url .= "&extras=albumdetail";
-		}
+
+        if ($details)
+        {
+            $url .= "&extras=albumdetail";
+        }
 
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
@@ -392,12 +432,13 @@ class MetaTune {
      * <li>5ObUhLdIEbhEqVCYxzVQ9l</li>
      * </ul>
      *
-	 * @deprecated
+     * @deprecated
      * @throws MetaTuneException
      * @param string $id
      * @return Artist
      */
-    public function lookupArtistDetailed($id) {
+    public function lookupArtistDetailed($id)
+    {
         return $this->lookupArtist($id, true);
     }
 
@@ -405,8 +446,8 @@ class MetaTune {
      * Get basic info about one album. Argument takes a spotify URI
      * or just the id it self.
      *
-	 * If $details is false only basic album information will be fetched. 
-	 * Otherwise all details will be shown. (Tracks)
+     * If $details is false only basic album information will be fetched. 
+     * Otherwise all details will be shown. (Tracks)
      *
      * Example of $id:
      * <ul>
@@ -416,19 +457,22 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $id
-	 * @param boolean $details
+     * @param boolean $details
      * @return Album
      */
-    public function lookupAlbum($id, $details = false) {
-        if (substr($id, 0, 14) != "spotify:album:") {
+    public function lookupAlbum($id, $details = false)
+    {
+        if (substr($id, 0, 14) != "spotify:album:")
+        {
             $id = "spotify:album:" . $id;
         }
 
         $url = self::SERVICE_BASE_URL_LOOKUP . "?uri=" . ($id);
 
-		if($details) {
-			$url .= "&extras=trackdetail";
-		}
+        if ($details)
+        {
+            $url .= "&extras=trackdetail";
+        }
 
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
@@ -451,12 +495,13 @@ class MetaTune {
      * <li>1kjefoUShy8bZcwBEHtMWp</li>
      * </ul>
      *
-	 * @deprecated
+     * @deprecated
      * @throws MetaTuneException
      * @param string $id
      * @return Album
      */
-    public function lookupAlbumDetailed($id) {
+    public function lookupAlbumDetailed($id)
+    {
         return $this->lookupAlbum($id, true);
     }
 
@@ -466,7 +511,8 @@ class MetaTune {
      * @param string $string
      * @return string
      */
-    private function translateString($string) {
+    private function translateString($string)
+    {
         // Replace "-" in regular search but leave it on "tag"-searches
         // such as "genre:brit-pop" or "label:deutsche-grammophon"
         $string = preg_replace("/(^[^a-z\:]+\-|[\_\(\)])/ui", " ", (trim($string)));
@@ -484,7 +530,8 @@ class MetaTune {
      * @param string $url
      * @return string
      */
-    private function requestContent($url) {
+    private function requestContent($url)
+    {
         $headerdata = array(
             'http' => array(
                 'method' => "GET",
@@ -492,13 +539,16 @@ class MetaTune {
             )
         );
 
-        if (self::CACHE_DIR && self::USE_CACHE) {
+        if (self::CACHE_DIR && self::USE_CACHE)
+        {
             $delimiter = (substr(self::CACHE_DIR, -1) != "/") ? "/" : "";
             $filename = self::CACHE_DIR . $delimiter . self::CACHE_PREFIX . md5($url) . '.xml';
-            if (file_exists($filename)) {
+            if (file_exists($filename))
+            {
                 $cacheContents = file_get_contents($filename);
                 $matches = array();
-                if (preg_match('/<!-- Last-Modified: ([^\n]+) -->\\z/', $cacheContents, $matches)) {
+                if (preg_match('/<!-- Last-Modified: ([^\n]+) -->\\z/', $cacheContents, $matches))
+                {
                     $headerdata['http']['header'] .= "If-Modified-Since: " . $matches[1] . "\r\n";
                 }
             }
@@ -506,16 +556,21 @@ class MetaTune {
 
         $headers = stream_context_create($headerdata);
         $contents = @file_get_contents($url, false, $headers);
-        if (isset($http_response_header) && is_array($http_response_header)) {
+        if (isset($http_response_header) && is_array($http_response_header))
+        {
             $errorCode = str_replace("HTTP/1.1 ", "", $http_response_header[0]);
-            if ($errorCode != "200 OK" && $errorCode != "304 Not Modified") {
+            if ($errorCode != "200 OK" && $errorCode != "304 Not Modified")
+            {
                 throw new MetaTuneException($errorCode);
             }
 
-            if ($errorCode == "304 Not Modified") {
+            if ($errorCode == "304 Not Modified")
+            {
                 // If we're here, the cache header must have been set, so $cacheContents must have contents.
                 $contents = $cacheContents;
-            } else if (self::CACHE_DIR && self::USE_CACHE) {
+            }
+            else if (self::CACHE_DIR && self::USE_CACHE)
+            {
                 // cache data
                 $lastChangedDate = "<!-- Last-Modified: " . str_replace("Last-Modified: ", "", $http_response_header[6]) . " -->";
                 file_put_contents($filename, $contents . $lastChangedDate);
@@ -530,11 +585,14 @@ class MetaTune {
      * @param SimpleXMLElement $artist
      * @return Artist
      */
-    private function extractArtistInfo(SimpleXMLElement $artist) {
+    private function extractArtistInfo(SimpleXMLElement $artist)
+    {
         $artistId = $artist->attributes();
         $albums = array();
-        if (isset($artist->albums->album)) {
-            foreach ($artist->albums->album as $album) {
+        if (isset($artist->albums->album))
+        {
+            foreach ($artist->albums->album as $album)
+            {
                 $albums[] = $this->extractAlbumInfo($album);
             }
         }
@@ -551,29 +609,37 @@ class MetaTune {
      * @param Album $albumInput
      * @return Track
      */
-    private function extractTrackInfo(SimpleXMLElement $track, Album $albumInput = null) {
+    private function extractTrackInfo(SimpleXMLElement $track, Album $albumInput = null)
+    {
         $artists = array();
-        foreach ($track->artist as $artistl) {
+        foreach ($track->artist as $artistl)
+        {
             $artists[] = $this->extractArtistInfo($artistl);
         }
-        if (count($artists) == 1) {
+        if (count($artists) == 1)
+        {
             $artists = $artists[0];
         }
 
         $artistAlbum = $artists;
-        if (is_array($artists)) {
+        if (is_array($artists))
+        {
             $artistAlbum = $artists[0];
         }
 
         $cdnm = 0;
-        if (isset($track->{"disc-number"})) {
+        if (isset($track->{"disc-number"}))
+        {
             $cdnm = (int) $track->{"disc-number"};
         }
 
-        if (!isset($albumInput) || $albumInput == null) {
+        if (!isset($albumInput) || $albumInput == null)
+        {
             $albumId = $track->album->attributes();
             $album = new Album((string) $albumId['href'], (string) $track->album->name, (string) $track->album->released, $artistAlbum);
-        } else {
+        }
+        else
+        {
             $album = $albumInput;
         }
 
@@ -588,24 +654,29 @@ class MetaTune {
      * @param string $id
      * @return Album
      */
-    private function extractAlbumInfo(SimpleXMLElement $album, $id = null) {
+    private function extractAlbumInfo(SimpleXMLElement $album, $id = null)
+    {
         $artistUse = $album->artist;
-        if (is_array($album->artist) || isset($album->artist[0])) {
+        if (is_array($album->artist) || isset($album->artist[0]))
+        {
             $artistUse = $album->artist[0];
         }
         $artist = $this->extractArtistInfo($artistUse);
 
         $albumId = $album->attributes();
         $albumURI = (string) $albumId['href'];
-        if ($id != null && isset($id)) {
+        if ($id != null && isset($id))
+        {
             $albumURI = $id;
         }
 
         $currentAlbum = new Album($albumURI, (string) $album->name, (string) $album->released, $artist, (double) $album->popularity);
 
         $tracks = array();
-        if (isset($album->tracks->track)) {
-            foreach ($album->tracks->track as $track) {
+        if (isset($album->tracks->track))
+        {
+            foreach ($album->tracks->track as $track)
+            {
                 $tracks[] = $this->extractTrackInfo($track, clone $currentAlbum);
             }
         }
