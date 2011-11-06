@@ -558,7 +558,7 @@ class MetaTune {
         $contents = @file_get_contents($url, false, $headers);
         if (isset($http_response_header) && is_array($http_response_header))
         {
-            $errorCode = str_replace("HTTP/1.1 ", "", $http_response_header[0]);
+            $errorCode = str_replace(array("HTTP/1.1 ", "HTTP/1.1 "), "", $http_response_header[0]);
             if ($errorCode != "200 OK" && $errorCode != "304 Not Modified")
             {
                 throw new MetaTuneException($errorCode);
