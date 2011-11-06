@@ -231,6 +231,12 @@ class MetaTune {
         throw new MetaTuneException(1003);
     }
 
+    private function addPageSuffix($page) 
+    {
+        if ($page <= 1 || !is_numeric($page)) return "";
+        return "&page=" . (int) $page;
+    }
+
     /**
      * Search for a spesific track.
      *
@@ -243,11 +249,12 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $name
+     * @param int $page
      * @return array
      */
-    public function searchTrack($name)
+    public function searchTrack($name, $page = 1)
     {
-        $url = self::SERVICE_BASE_URL_SEARCH . "track?q=" . $this->translateString($name);
+        $url = self::SERVICE_BASE_URL_SEARCH . "track?q=" . $this->translateString($name) . $this->addPageSuffix($page);
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
 
@@ -269,11 +276,12 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $name
+     * @param int $page
      * @return array
      */
-    public function searchArtist($name)
+    public function searchArtist($name, $page = 1)
     {
-        $url = self::SERVICE_BASE_URL_SEARCH . "artist?q=" . $this->translateString($name);
+        $url = self::SERVICE_BASE_URL_SEARCH . "artist?q=" . $this->translateString($name) . $this->addPageSuffix($page);
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
 
@@ -291,11 +299,12 @@ class MetaTune {
      *
      * @throws MetaTuneException
      * @param string $name
+     * @param int $page
      * @return array
      */
-    public function searchAlbum($name)
+    public function searchAlbum($name, $page = 1)
     {
-        $url = self::SERVICE_BASE_URL_SEARCH . "album?q=" . $this->translateString($name);
+        $url = self::SERVICE_BASE_URL_SEARCH . "album?q=" . $this->translateString($name) . $this->addPageSuffix($page);
         $contents = $this->requestContent($url);
         $xml = new SimpleXMLElement($contents);
 
