@@ -34,6 +34,7 @@ class Album extends SpotifyItem {
     private $popularity;
     private $artist;
     private $tracks;
+    private $territories;
 
     /**
      *
@@ -43,13 +44,14 @@ class Album extends SpotifyItem {
      * @param Artist $artist
      * @param float $popularity
      */
-    public function __construct($uri, $name, $release, Artist $artist = null, $popularity = 0.0, $tracks = array()) {
+    public function __construct($uri, $name, $release, Artist $artist = null, $popularity = 0.0, $tracks = array(), $territories = array()) {
         $this->uri = $uri;
         $this->name = $name;
         $this->release = $release;
         $this->popularity = $popularity;
         $this->artist = $artist;
         $this->tracks = $tracks;
+        $this->territories = $territories;
     }
 
     /**
@@ -97,6 +99,35 @@ class Album extends SpotifyItem {
      */
     public function setTracks ($tracks) {
         $this->tracks = $tracks;
+    }
+
+    /**
+     * Get all territories that this album is available in..
+     *
+     * @return string[]
+     */
+    public function getTerritories() {
+        return $this->territories;
+    }
+
+    /**
+     * Set all territories.
+     * 
+     * @param string[] $territories
+     */
+    public function setTerritories ($territories) {
+        $this->territories = $territories;
+    }
+
+    /**
+     * Returns TRUE if the album is available in the given territory,
+     * or available worldwide.
+     *
+     * @param string $territory
+     * @return boolean
+     */
+    public function isAvailable($territory) {
+      return in_array('worldwide', $this->territories) || in_array($territory, $this->territories);
     }
 
     /**
