@@ -646,6 +646,8 @@ class MetaTune {
         {
             $albumId = $track->album->attributes();
             $album = new Album((string) $albumId['href'], (string) $track->album->name, (string) $track->album->released, $artistAlbum);
+            $territories = explode(' ', (string) $track->album->availability->territories);
+            $album->setTerritories($territories);
         }
         else
         {
@@ -680,6 +682,9 @@ class MetaTune {
         }
 
         $currentAlbum = new Album($albumURI, (string) $album->name, (string) $album->released, $artist, (double) $album->popularity);
+
+        $territories = explode(' ', (string) $album->availability->territories);
+        $currentAlbum->setTerritories($territories);
 
         $tracks = array();
         if (isset($album->tracks->track))
