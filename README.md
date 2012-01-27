@@ -1,11 +1,11 @@
-= Installation and Requirements =
-== Requirements ==
+# Installation and Requirements
+## Requirements 
 
  * PHP 5
  * Enabled fopen wrappers.
  * Read/Write access to server (For caching)
 
-== How to install ==
+## How to install
 
  * Download latest version of MetaTune
  * Upload `/lib` and all it's contents to your web server. 
@@ -13,7 +13,7 @@
  * Look at some of the examples or read the FeatureList for help using MetaTune. 
 
 
-== Features ==
+## Features
 
 Some features includes:
  * Search for Track/Artist/Album
