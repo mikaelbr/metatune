@@ -51,8 +51,9 @@
  * @version 1.0
  * @package MetaTune
  */
+
 class MetaTune {
-    const CACHE_DIR = 'lib/cache/'; // Cache directory (must be writable)
+    const CACHE_DIR = '/cache/'; // Cache directory (must be writable) relative to this file
     const USE_CACHE = true; // Should caching be activated?
     const CACHE_PREFIX = "METATUNE_CACHE_"; // prefix for cache-files. 
 
@@ -548,10 +549,10 @@ class MetaTune {
             )
         );
 
-        if (self::CACHE_DIR && self::USE_CACHE)
+        if ( dirname(__FILE__) . self::CACHE_DIR && self::USE_CACHE)
         {
-            $delimiter = (substr(self::CACHE_DIR, -1) != "/") ? "/" : "";
-            $filename = self::CACHE_DIR . $delimiter . self::CACHE_PREFIX . md5($url) . '.xml';
+            $delimiter = (substr(dirname(__FILE__) . self::CACHE_DIR, -1) != "/") ? "/" : "";
+            $filename = dirname(__FILE__) . self::CACHE_DIR . $delimiter . self::CACHE_PREFIX . md5($url) . '.xml';
             if (file_exists($filename))
             {
                 $cacheContents = file_get_contents($filename);
@@ -578,7 +579,7 @@ class MetaTune {
                 // If we're here, the cache header must have been set, so $cacheContents must have contents.
                 $contents = $cacheContents;
             }
-            else if (self::CACHE_DIR && self::USE_CACHE)
+            else if (dirname(__FILE__) . self::CACHE_DIR && self::USE_CACHE)
             {
                 // cache data
                 $lastChangedDate = "<!-- Last-Modified: " . str_replace("Last-Modified: ", "", $http_response_header[6]) . " -->";
