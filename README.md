@@ -14,14 +14,17 @@
 
 
 ## Features
-
 Some features includes:
+
  * Search for Track/Artist/Album
  * Lookup detailed/basic info about Track/Artist/Album
  * Exceptions for error handling. 
  * Caching metadata.
  * XML Import/Export for quick save/load.
 
+Look at [the Wiki](https://github.com/mikaelbr/metatune/wiki/Features-of-MetaTune---Spotify-Metadata-API-PHP-Wrapper) for usage and full support. 
+
+--
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,6 +38,8 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
+
+--
 
 SPOTIFY Disclaimer
 This product uses a SPOTIFY API but is not endorsed, certified or otherwise
