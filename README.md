@@ -181,7 +181,7 @@ echo "<pre>" . print_r($tracksImport, 1) . "</pre>";
 
 In this case ```$tracksXML``` will contain something like:
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <tracks>
 	<track href="spotify:track:3BbfQLpcj0BfjM5rq8Ioj9"><![CDATA[]]>
@@ -215,7 +215,7 @@ In this case ```$tracksXML``` will contain something like:
 
 And ```$tracksImport``` will contain your original data:
 
-```
+```php
 Array
 (
     [0] => Track Object
