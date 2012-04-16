@@ -846,6 +846,9 @@ nav ul li.tag-h2 + .tag-h1 {
 nav ul a {
   color: #666;
 }
+nav ul li.active a {
+  color: #4276b6;
+}
 nav ul a:hover {
   color: #999;
 }
