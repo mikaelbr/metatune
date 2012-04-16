@@ -45,6 +45,11 @@ require_once("./lib/config.php");
 
         <p>This is just demos of Metatune running. Look at <a href="http://mikaelbr.github.com/metatune">http://mikaelbr.github.com/metatune</a> for documentation and description</p>
 
+        <h3>NB!</h3>
+        <p><strong>This site is made using the Githubs automatic pages creator, and the theme is made by <a href="http://twitter.com/#!/michigangraham">mattgraham</a>. I use this design and code to match with the documentation pages as linked above. 
+          I claim no ownership of this design, and I only host it here to support PHP for demoing. This site can be taken down any day, if
+          Github or <a href="http://twitter.com/#!/michigangraham">mattgraham</a> want it so.</strong></p>
+
 <h1>Play Button</h1>
 
 <div class="highlight">
@@ -181,20 +186,9 @@ Spotify Group.
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/mikaelbr">mikaelbr</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+        <p><small>Created as GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-16316654-3");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
   </body>
 </html>
