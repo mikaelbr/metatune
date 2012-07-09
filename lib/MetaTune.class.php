@@ -580,20 +580,42 @@ class MetaTune {
 
         $headers = stream_context_create($headerdata);
         $contents = @file_get_contents($url, false, $headers);
-        if (isset($http_response_header) && is_array($http_response_header))
+        
+        # check if file_get_contents returned content
+        if(!$contents)
         {
-            $errorCode = str_replace(array("HTTP/1.1 ", "HTTP/1.1 "), "", $http_response_header[0]);
-            if ($errorCode != "200 OK" && $errorCode != "304 Not Modified")
+        	# check if curl is available
+        	if (function_exists('curl_init'))
+			{
+				$ch = curl_init($url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				
+				$contents = curl_exec($ch);
+				
+				$info = curl_getinfo($ch);
+				$errorCode = $info['http_code'];
+				
+				curl_close($ch);
+			}
+        }
+        
+        if ( (isset($http_response_header) && is_array($http_response_header)) || $errorCode)
+        {
+        	if((isset($http_response_header) && is_array($http_response_header)))
+        	{
+	            $errorCode = str_replace(array("HTTP/1.1 ", "HTTP/1.1 "), "", $http_response_header[0]);
+        	}
+            if ($errorCode != "200 OK" && $errorCode != "304 Not Modified" && $errorCode != "200" && $errorCode != "304")
             {
                 throw new MetaTuneException($errorCode);
             }
-
-            if ($errorCode == "304 Not Modified")
+			
+            if ($errorCode == "304 Not Modified" || $errorCode == "304")
             {
                 // If we're here, the cache header must have been set, so $cacheContents must have contents.
                 $contents = $cacheContents;
             }
-            else if (dirname(__FILE__) . self::CACHE_DIR && self::USE_CACHE)
+            else if (dirname(__FILE__) . self::CACHE_DIR && self::USE_CACHE && (isset($http_response_header) && is_array($http_response_header)))
             {
                 // cache data
                 $lastChangedDate = "<!-- Last-Modified: " . str_replace("Last-Modified: ", "", $http_response_header[6]) . " -->";
