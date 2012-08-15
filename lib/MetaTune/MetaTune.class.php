@@ -54,7 +54,7 @@ namespace MetaTune;
  */
 
 class MetaTune {
-    const CACHE_DIR = '/cache/'; // Cache directory (must be writable) relative to this file
+    const CACHE_DIR = 'cache/'; // Cache directory (must be writable) relative to this file
     const USE_CACHE = true; // Should caching be activated?
     const CACHE_PREFIX = "METATUNE_CACHE_"; // prefix for cache-files. 
 
@@ -73,7 +73,11 @@ class MetaTune {
     // outside it self. 
     private function __construct()
     {
-        
+        $delimiter = (substr(self::CACHE_DIR, 0, 1) != "/") ? "/" : "";
+        $cache_dir = dirname(__FILE__) . $delimiter . self::CACHE_DIR;
+        if ((!is_dir($cache_dir) || !is_writable($cache_dir)) && self::USE_CACHE) {
+            throw new \Exception("No writable cache dir found: " . $cache_dir);
+        }
     }
 
     /**
@@ -566,8 +570,9 @@ class MetaTune {
 
         if ( dirname(__FILE__) . self::CACHE_DIR && self::USE_CACHE)
         {
-            $delimiter = (substr(dirname(__FILE__) . self::CACHE_DIR, -1) != "/") ? "/" : "";
-            $filename = dirname(__FILE__) . self::CACHE_DIR . $delimiter . self::CACHE_PREFIX . md5($url) . '.xml';
+            $cacheDelimiter = (substr(self::CACHE_DIR, 0, 1) != "/") ? "/" : "";
+            $delimiter = (substr(self::CACHE_DIR, -1) != "/") ? "/" : "";
+            $filename = dirname(__FILE__) . $cacheDelimiter . self::CACHE_DIR . $delimiter . self::CACHE_PREFIX . md5($url) . '.xml';
             if (file_exists($filename))
             {
                 $cacheContents = file_get_contents($filename);
