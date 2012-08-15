@@ -30,7 +30,6 @@ namespace MetaTune\Entity;
  * @package MetaTune
  */
 class Album extends SpotifyItem {
-    private $uri;
     private $name;
     private $release;
     private $popularity;

@@ -30,7 +30,6 @@ namespace MetaTune\Entity;
  */
 class Artist extends SpotifyItem {
 
-    private $uri;
     private $name;
     private $popularity;
     private $albums;
