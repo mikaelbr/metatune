@@ -639,7 +639,7 @@ class MetaTune {
      * @param Album $albumInput
      * @return Track
      */
-    private function extractTrackInfo(\SimpleXMLElement $track, Album $albumInput = null)
+    private function extractTrackInfo(\SimpleXMLElement $track, Entity\Album $albumInput = null)
     {
         $artists = array();
         foreach ($track->artist as $artistl)
