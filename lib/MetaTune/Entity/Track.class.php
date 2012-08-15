@@ -186,7 +186,7 @@ class Track extends SpotifyItem {
      * @return string
      */
     public function getURL() {
-        return $this->spotifyBase . "track/" . parent::getID($this->uri);
+        return $this->spotifyBase . "track/" . parent::getID();
     }
 
     /**

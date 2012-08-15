@@ -80,7 +80,7 @@ class Artist extends SpotifyItem {
      * @return string
      */
     public function getURL() {
-        return $this->spotifyBase . "artist/" . $this->getID($this->uri);
+        return $this->spotifyBase . "artist/" . $this->getID();
     }
 
     /**

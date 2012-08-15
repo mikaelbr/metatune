@@ -140,7 +140,7 @@ class Album extends SpotifyItem {
      * @return string
      */
     public function getURL() {
-        return $this->spotifyBase . "album/" . $this->getID($this->uri);
+        return $this->spotifyBase . "album/" . $this->getID();
     }
 
     /**
