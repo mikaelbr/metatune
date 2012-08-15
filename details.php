@@ -16,7 +16,7 @@ require_once("lib/config.php");
                 $start = microtime();
             }
 
-            $spotify = MetaTune::getInstance();
+            $spotify = MetaTune\MetaTune::getInstance();
             try {
                 $content = $spotify->lookup($_GET['id']);
             } catch (MetaTuneException $ex) {
