@@ -1,4 +1,5 @@
 <?php
+namespace MetaTune;
 
 /**
  * MetaTune - The ultimate PHP Wrapper to the Spotify Metadata API
@@ -153,7 +154,7 @@ class MetaTune {
      */
     public function parseXMLTracks($contents)
     {
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
         if (isset($xml->track))
         {
             $tracks = array();
@@ -182,7 +183,7 @@ class MetaTune {
      */
     public function parseXMLArtist($contents)
     {
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
         if (isset($xml->artist))
         {
             $artists = array();
@@ -216,7 +217,7 @@ class MetaTune {
      */
     public function parseXMLAlbum($contents)
     {
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
         if (isset($xml->album))
         {
             $albums = array();
@@ -262,7 +263,7 @@ class MetaTune {
     {
         $url = self::SERVICE_BASE_URL_SEARCH . "track?q=" . $this->translateString($name) . $this->addPageSuffix($page);
         $contents = $this->requestContent($url);
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
 
         $tracks = array();
         foreach ($xml->track as $track)
@@ -293,7 +294,7 @@ class MetaTune {
     {
         $url = self::SERVICE_BASE_URL_SEARCH . "artist?q=" . $this->translateString($name) . $this->addPageSuffix($page);
         $contents = $this->requestContent($url);
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
 
         $artists = array();
         foreach ($xml->artist as $artist)
@@ -316,7 +317,7 @@ class MetaTune {
     {
         $url = self::SERVICE_BASE_URL_SEARCH . "album?q=" . $this->translateString($name) . $this->addPageSuffix($page);
         $contents = $this->requestContent($url);
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
 
         $albums = array();
         foreach ($xml->album as $album)
@@ -385,7 +386,7 @@ class MetaTune {
 
         $url = self::SERVICE_BASE_URL_LOOKUP . "?uri=" . ($id);
         $contents = $this->requestContent($url);
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
 
         $track = $this->extractTrackInfo($xml);
         $track->setURI($id);
@@ -436,7 +437,7 @@ class MetaTune {
         }
 
         $contents = $this->requestContent($url);
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
 
         $artist = $this->extractArtistInfo($xml);
         $artist->setURI($id);
@@ -499,7 +500,7 @@ class MetaTune {
         }
 
         $contents = $this->requestContent($url);
-        $xml = new SimpleXMLElement($contents);
+        $xml = new \SimpleXMLElement($contents);
 
         $album = $this->extractAlbumInfo($xml, $id);
         $album->setURI($id);
@@ -609,7 +610,7 @@ class MetaTune {
      * @param SimpleXMLElement $artist
      * @return Artist
      */
-    private function extractArtistInfo(SimpleXMLElement $artist)
+    private function extractArtistInfo(\SimpleXMLElement $artist)
     {
         $artistId = $artist->attributes();
         $albums = array();
@@ -623,7 +624,7 @@ class MetaTune {
 
 
 
-        return new Artist((string) $artistId['href'], (string) $artist->name, (double) $artist->popularity, $albums);
+        return new Entity\Artist((string) $artistId['href'], (string) $artist->name, (double) $artist->popularity, $albums);
     }
 
     /**
@@ -633,7 +634,7 @@ class MetaTune {
      * @param Album $albumInput
      * @return Track
      */
-    private function extractTrackInfo(SimpleXMLElement $track, Album $albumInput = null)
+    private function extractTrackInfo(\SimpleXMLElement $track, Album $albumInput = null)
     {
         $artists = array();
         foreach ($track->artist as $artistl)
@@ -660,7 +661,7 @@ class MetaTune {
         if (!isset($albumInput) || $albumInput == null)
         {
             $albumId = $track->album->attributes();
-            $album = new Album((string) $albumId['href'], (string) $track->album->name, (string) $track->album->released, $artistAlbum);
+            $album = new Entity\Album((string) $albumId['href'], (string) $track->album->name, (string) $track->album->released, $artistAlbum);
             $territories = explode(' ', (string) $track->album->availability->territories);
             $album->setTerritories($territories);
         }
@@ -670,7 +671,7 @@ class MetaTune {
         }
 
         $trackId = $track->attributes();
-        return new Track((string) $trackId['href'], (string) $track->name, $artists, $album, (double) $track->length, (double) $track->popularity, (int) $track->{"track-number"}, $cdnm);
+        return new Entity\Track((string) $trackId['href'], (string) $track->name, $artists, $album, (double) $track->length, (double) $track->popularity, (int) $track->{"track-number"}, $cdnm);
 
     }
 
@@ -681,7 +682,7 @@ class MetaTune {
      * @param string $id
      * @return Album
      */
-    private function extractAlbumInfo(SimpleXMLElement $album, $id = null)
+    private function extractAlbumInfo(\SimpleXMLElement $album, $id = null)
     {
         $artistUse = $album->artist;
         if (is_array($album->artist) || isset($album->artist[0]))
@@ -697,7 +698,7 @@ class MetaTune {
             $albumURI = $id;
         }
 
-        $currentAlbum = new Album($albumURI, (string) $album->name, (string) $album->released, $artist, (double) $album->popularity);
+        $currentAlbum = new Entity\Album($albumURI, (string) $album->name, (string) $album->released, $artist, (double) $album->popularity);
 
         $territories = explode(' ', (string) $album->availability->territories);
         $currentAlbum->setTerritories($territories);

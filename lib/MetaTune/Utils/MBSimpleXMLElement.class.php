@@ -1,4 +1,5 @@
 <?php
+namespace MetaTune\Utils;
 
 /**
  * Extention of the SimpleXMLElement class to make SimpleXMLElement ´

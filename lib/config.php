@@ -26,9 +26,13 @@ if(DEBUG) {
 
 // Added a magic function (autoload) to not have to import all the classes
 // if there no use for them.
-function __autoload($class) {
-    $filename = $class . '.class.php';
-    require_once $filename;
-}
+// function __autoload($class) {
+//     echo $class;
+//     $class = './lib/' . str_replace('\\', '/', $class) . '.class.php';
+//     require_once($class);
+// }
 // either you have this autoload-function or you must require/include all files.
 
+spl_autoload_register(function($className) { 
+    require_once('./lib/' . str_replace('\\', '/', ltrim($className, '\\')) . '.class.php'); 
+}); 

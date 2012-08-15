@@ -1,4 +1,6 @@
 <?php
+namespace MetaTune\Entity;
+
 /**
  * MetaTune - A PHP Wrapper to the Spotify Metadata API
  * Copyright (C) 2010  Mikael Brevik

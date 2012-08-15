@@ -80,7 +80,7 @@ require_once("lib/config.php");
             if (isset($_POST['checkTime']) && $_POST['checkTime'] > time() - 60 * 5) {
 
                 // Initiate the MetaTune object.
-                $spotiy = MetaTune::getInstance();
+                $spotiy = MetaTune\MetaTune::getInstance();
                 $out = '<div class="masterResult">';                
                 if (!empty($_POST['artist'])) {
                     // Get a list of artists

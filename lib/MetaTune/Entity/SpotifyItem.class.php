@@ -1,4 +1,6 @@
 <?php
+namespace MetaTune\Entity;
+
 /**
  * Parent class of all different Spotify items.
  * 

@@ -1,4 +1,5 @@
 <?php
+namespace MetaTune\Entity;
 
 /**
  * A track from Spotify. Contains information about artist and album. 
