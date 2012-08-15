@@ -29,7 +29,6 @@
  */
 class Artist extends SpotifyItem {
 
-    private $uri;
     private $name;
     private $popularity;
     private $albums;
@@ -80,7 +79,7 @@ class Artist extends SpotifyItem {
      * @return string
      */
     public function getURL() {
-        return $this->spotifyBase . "artist/" . $this->getID($this->uri);
+        return $this->spotifyBase . "artist/" . $this->getID();
     }
 
     /**

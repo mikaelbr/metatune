@@ -28,7 +28,7 @@
  * @package MetaTune
  */
 class Album extends SpotifyItem {
-    private $uri;
+
     private $name;
     private $release;
     private $popularity;
@@ -139,7 +139,7 @@ class Album extends SpotifyItem {
      * @return string
      */
     public function getURL() {
-        return $this->spotifyBase . "album/" . $this->getID($this->uri);
+        return $this->spotifyBase . "album/" . $this->getID();
     }
 
     /**

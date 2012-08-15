@@ -32,7 +32,6 @@
  */
 class Track extends SpotifyItem {
 
-    private $uri;
     private $title;
     private $artist;
     private $album;
@@ -186,16 +185,7 @@ class Track extends SpotifyItem {
      * @return string
      */
     public function getURL() {
-        return $this->spotifyBase . "track/" . parent::getID($this->uri);
-    }
-
-    /**
-     * Get just the id of the track. (last part of a spotify uri).
-     *
-     * @return string
-     */
-    public function getID() {
-        return parent::getID($this->uri);
+        return $this->spotifyBase . "track/" . parent::getID();
     }
 
     /**

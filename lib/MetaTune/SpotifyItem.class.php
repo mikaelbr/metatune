@@ -34,6 +34,8 @@ abstract class SpotifyItem {
     // The start of the HTTP URL to open a medium.
     public $spotifyBase = "http://open.spotify.com/";
 
+    protected $uri;
+
     /**
      * A must have method to implement for all extended classes. Used
      * to find a HTTP URL from a Spotify Medium.
@@ -58,8 +60,8 @@ abstract class SpotifyItem {
      * @param string $id
      * @return string
      */
-    public function getID($id) {
-        $uriSplit = explode(":", $id);
+    public function getID() {
+        $uriSplit = explode(":", $this->uri);
         return $uriSplit[2];
     }
 
