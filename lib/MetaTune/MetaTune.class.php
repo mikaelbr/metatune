@@ -54,7 +54,7 @@ namespace MetaTune;
  */
 
 class MetaTune {
-    const CACHE_DIR = 'cache/'; // Cache directory (must be writable) relative to this file
+    const CACHE_DIR = '../cache/'; // Cache directory (must be writable) relative to this file
     const USE_CACHE = true; // Should caching be activated?
     const CACHE_PREFIX = "METATUNE_CACHE_"; // prefix for cache-files. 
 
@@ -74,10 +74,13 @@ class MetaTune {
     private function __construct()
     {
         $delimiter = (substr(self::CACHE_DIR, 0, 1) != "/") ? "/" : "";
-        $cache_dir = dirname(__FILE__) . $delimiter . self::CACHE_DIR;
-        if ((!is_dir($cache_dir) || !is_writable($cache_dir)) && self::USE_CACHE) {
-            throw new \Exception("No writable cache dir found: " . $cache_dir);
+        $cacheDir = dirname(__FILE__) . $delimiter . self::CACHE_DIR;
+        if ((!is_dir($cacheDir) || !is_writable($cacheDir)) && self::USE_CACHE) {
+            throw new \Exception("No writable cache dir found: " . $cacheDir);
         }
+
+        Utils\CacheRequest::$useCache = self::USE_CACHE;
+        Utils\CacheRequest::$cacheDir = $cacheDir;
     }
 
     /**
@@ -561,52 +564,11 @@ class MetaTune {
      */
     private function requestContent($url)
     {
-        $headerdata = array(
-            'http' => array(
-                'method' => "GET",
-                'header' => "Accept: application/xml\r\n"
-            )
-        );
-
-        if ( dirname(__FILE__) . self::CACHE_DIR && self::USE_CACHE)
-        {
-            $cacheDelimiter = (substr(self::CACHE_DIR, 0, 1) != "/") ? "/" : "";
-            $delimiter = (substr(self::CACHE_DIR, -1) != "/") ? "/" : "";
-            $filename = dirname(__FILE__) . $cacheDelimiter . self::CACHE_DIR . $delimiter . self::CACHE_PREFIX . md5($url) . '.xml';
-            if (file_exists($filename))
-            {
-                $cacheContents = file_get_contents($filename);
-                $matches = array();
-                if (preg_match('/<!-- Last-Modified: ([^\n]+) -->\\z/', $cacheContents, $matches))
-                {
-                    $headerdata['http']['header'] .= "If-Modified-Since: " . $matches[1] . "\r\n";
-                }
-            }
-        }
-
-        $headers = stream_context_create($headerdata);
-        $contents = @file_get_contents($url, false, $headers);
-        if (isset($http_response_header) && is_array($http_response_header))
-        {
-            $errorCode = str_replace(array("HTTP/1.1 ", "HTTP/1.1 "), "", $http_response_header[0]);
-            if ($errorCode != "200 OK" && $errorCode != "304 Not Modified")
-            {
-                throw new MetaTuneException($errorCode);
-            }
-
-            if ($errorCode == "304 Not Modified")
-            {
-                // If we're here, the cache header must have been set, so $cacheContents must have contents.
-                $contents = $cacheContents;
-            }
-            else if (dirname(__FILE__) . self::CACHE_DIR && self::USE_CACHE)
-            {
-                // cache data
-                $lastChangedDate = "<!-- Last-Modified: " . str_replace("Last-Modified: ", "", $http_response_header[6]) . " -->";
-                file_put_contents($filename, $contents . $lastChangedDate);
-            }
-        }
-        return $contents;
+        $cacheDelimiter = (substr(self::CACHE_DIR, 0, 1) != "/") ? "/" : "";
+        $delimiter = (substr(self::CACHE_DIR, -1) != "/") ? "/" : "";
+        $filename = dirname(__FILE__) . $cacheDelimiter . self::CACHE_DIR . $delimiter . self::CACHE_PREFIX . md5($url) . '.xml';
+        
+        return Utils\CacheRequest::request($url, $filename);
     }
 
     /**
