@@ -129,15 +129,15 @@ class MetaTune {
 
         if ($input[0] instanceof Artist)
         {
-            $xml = new MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><artists></artists>');
+            $xml = new Utils\MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><artists></artists>');
         }
         else if ($input[0] instanceof Track)
         {
-            $xml = new MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><tracks></tracks>');
+            $xml = new Utils\MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><tracks></tracks>');
         }
         else if ($input[0] instanceof Album)
         {
-            $xml = new MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><albums></albums>');
+            $xml = new Utils\MBSimpleXMLElement('<?xml version = "1.0" encoding = "UTF-8"?><albums></albums>');
         }
         else
         {
@@ -146,7 +146,7 @@ class MetaTune {
 
         foreach ($input as $item)
         {
-            $xml->addXMLElement(new MBSimpleXMLElement($item->asXML()));
+            $xml->addXMLElement(new Utils\MBSimpleXMLElement($item->asXML()));
         }
 
         return $xml->asXML();
