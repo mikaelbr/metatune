@@ -174,7 +174,7 @@ class Track extends SpotifyItem {
      * @return int
      */
     public function getDiscNr() {
-        return $this->trackNr;
+        return $this->discNr;
     }
 
     /**
